@@ -1,30 +1,28 @@
 <template>
-  <section class="h-full gradient-form bg-gray-200 md:h-screen">
+  <div class="min-h-screen bg-gray-200">
     <siteHeader />
-    <div class="container h-full w-full max-w-full">
-      <div class="flex justify-center items-center flex-wrap h-full text-gray-800">
-        <router-view />
-      </div>
+    <div class="flex justify-center items-center min-h-screen">
+      <router-view />
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
 import siteHeader from "@/components/header/header.vue";
-import '@/assets/tailwind.css';
+import "@/assets/tailwind.css";
 
 export default {
   name: "App",
   components: {
-    siteHeader
-  },
-  data: function () {
-    return {
-
-    };
+    siteHeader,
   },
   created() {
-    this.$store.dispatch("auth/check_auth");
+    // Optional auth check
+    this.$store?.dispatch?.("auth/check_auth");
   },
 };
 </script>
+
+<style>
+/* optional global styling */
+</style>

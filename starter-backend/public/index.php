@@ -5,51 +5,33 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+// Skip maintenance mode for testing
 /*
-|--------------------------------------------------------------------------
-| Check If The Application Is Under Maintenance
-|--------------------------------------------------------------------------
-|
-| If the application is in maintenance / demo mode via the "down" command
-| we will load this file so that any pre-rendered content can be shown
-| instead of starting the framework, which could cause an exception.
-|
-*/
-
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;
 }
-
-/*
-|--------------------------------------------------------------------------
-| Register The Auto Loader
-|--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| this application. We just need to utilize it! We'll simply require it
-| into the script here so we don't need to manually load our classes.
-|
 */
 
+// Autoload classes
 require __DIR__.'/../vendor/autoload.php';
 
-/*
-|--------------------------------------------------------------------------
-| Run The Application
-|--------------------------------------------------------------------------
-|
-| Once we have the application, we can handle the incoming request using
-| the application's HTTP kernel. Then, we will send the response back
-| to this client's browser, allowing them to enjoy our application.
-|
-*/
-
+// Boot the application
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
+// Create HTTP kernel
 $kernel = $app->make(Kernel::class);
 
-$response = $kernel->handle(
-    $request = Request::capture()
-)->send();
+// Capture the request
+$request = Request::capture();
 
+// Optional: Force bypass authentication for testing
+// You can set a fake authenticated user for every request
+// Uncomment below if needed
+// auth()->loginUsingId(1); // logs in member with ID 1 automatically
+
+// Handle the request and send response
+$response = $kernel->handle($request);
+$response->send();
+
+// Terminate kernel
 $kernel->terminate($request, $response);
